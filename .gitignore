@@ -1,0 +1,21 @@
+# 🗃️ Local SQLite Database
+*.db
+*.sqlite3
+
+# 🐍 Python Virtual Environment & Cache
+.venv/
+venv/
+ENV/
+__pycache__/
+*.py[cod]
+
+# 🎨 Streamlit Local Config & Cache
+.streamlit/
+*.pyc
+
+# 💻 OS Specific Files
+.DS_Store
+Thumbs.db
+
+# 🔑 Secrets & Environment Variables (If added later)
+.env
