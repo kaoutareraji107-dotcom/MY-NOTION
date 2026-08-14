@@ -4,23 +4,61 @@ import plotly.express as px
 import pandas as pd
 import time
 import os
+import random
 
 # 1. إعداد الصفحة
 st.set_page_config(
-    page_title="Student OS - Kuromi Edition", 
-    page_icon="🖤", 
+    page_title="Student OS - Kaoutar Edition", 
+    page_icon="👑", 
     layout="wide"
 )
 
 # 2. تهيئة قاعدة البيانات
 db.init_db()
 
-# 3. تطبيق CSS للتصميم (Kuromi Theme & Green Buttons)
+# 3. قائمة الاقتباسات التحفيزية لكوثر 💡
+MOTIVATIONAL_QUOTES = [
+    "كوثر، النجاح ماشي حظ، النجاح هو استمرار وتعب يومي! كملي ✨",
+    "كوثر، التفوق كينتظرك، كل دقيقة تركيز كتقربك للهدف 🎯",
+    "كوثر، انتِ قدها! خلي هدفك دايماً قدام عينيك وقراي بذكاء 🧠🔥",
+    "كوثر، العزيمة والحرص هما السر باش تكوني اللولة فـ المدرسة 💪",
+    "كوثر، الاستمرارية هي اللي تصنع الفرق، كملي اليوم بطاقة إيجابية 🌟"
+]
+
+# اختيار اقتباس عشوائي عند كل تشغيل
+daily_quote = random.choice(MOTIVATIONAL_QUOTES)
+
+# 4. تطبيق CSS للتصميم والعبارة التشجيعية
 st.markdown("""
     <style>
     /* خلفية القائمة الجانبية Sidebar */
     [data-testid="stSidebar"] {
         background-color: #FFC0CB !important;
+    }
+    
+    /* العبارة التحفيزية العلوية */
+    .top-goal-banner {
+        background-color: #FFE4E1;
+        border: 2px dashed #FFB6C1;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: bold;
+        color: #2D3748;
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    /* مربع الاقتباس اليومي */
+    .quote-box {
+        background-color: #FFF0F5;
+        border-right: 5px solid #2ECC71;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #2D3748;
+        margin-bottom: 20px;
     }
     
     /* أزرار باللون الأخضر الجميل */
@@ -58,9 +96,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 4. القائمة الجانبية (Sidebar)
+# 5. العبارة الثابتة فـ الأعلى
+st.markdown(
+    '<div class="top-goal-banner">👑 لا تنسي هدفنا الأول: الأولى على صعيد المدرسة (19/20) - التلميذة المثالية ✨</div>', 
+    unsafe_allow_html=True
+)
+
+# 6. القائمة الجانبية (Sidebar)
 with st.sidebar:
-    st.title("🎓 Student OS")
+    st.title("🎓 Kaoutar OS")
     st.caption("Kuromi Companion Edition 🖤")
     st.write("---")
     st.write("✅ **Tasks:** إدارة المهام")
@@ -68,21 +112,22 @@ with st.sidebar:
     st.write("⏱️ **Focus:** مؤقت التركيز")
     st.write("📊 **Stats:** الإحصائيات")
     st.write("---")
-    st.write("⚙️ Version v0.4")
+    st.write("⚙️ Version v0.5")
 
-# 5. التنسيق الرئيسي (صورة Kuromi + المحتوى)
+# 7. التنسيق الرئيسي (صورة Kuromi + المحتوى)
 col_img, col_content = st.columns([1, 2.5])
 
 with col_img:
-    # التأكد من وجود الصورة قبل عرضها
     if os.path.exists("assets/kuromi.png"):
         st.image("assets/kuromi.png", use_container_width=True)
     else:
-        st.info("📌 ضع صورة Kuromi داخل مجلد assets/kuromi.png لتظهر هنا!")
+        st.info("📌 ضعي صورة Kuromi داخل مجلد assets/kuromi.png لتظهر هنا!")
 
 with col_content:
-    st.title("🖤 Student OS")
-    st.caption("مرحباً بك! اختر القسم الذي تريد العمل عليه اليوم ✨")
+    st.title("🖤 مرحباً بك كوثر!")
+    
+    # عرض الاقتباس اليومي
+    st.markdown(f'<div class="quote-box">💬 <b>اقتباس اليوم:</b> {daily_quote}</div>', unsafe_allow_html=True)
     
     # إنشاء التبويبات Tabs
     tab_tasks, tab_habits, tab_focus, tab_stats = st.tabs([
@@ -96,12 +141,12 @@ with col_content:
     # ✅ TAB 1: TASKS
     # ==========================================
     with tab_tasks:
-        st.subheader("📋 إدارة المهام")
+        st.subheader("📋 إدارة المهام الدراسية")
         
         with st.form("add_task_form", clear_on_submit=True):
             c1, c2 = st.columns([3, 1])
             with c1:
-                task_title = st.text_input("عنوان المهمة", placeholder="ماذا سننجز اليوم؟")
+                task_title = st.text_input("عنوان المهمة", placeholder="شنو غادي نراجعوا اليوم يا كوثر؟")
             with c2:
                 priority = st.selectbox("الأولوية", ["Low", "Medium", "High"], index=1)
             
@@ -115,7 +160,7 @@ with col_content:
         
         tasks = db.get_tasks()
         if not tasks:
-            st.info("لا توجد مهام حالياً! ✨")
+            st.info("لا توجد مهام حالياً! ضيفي مراجعة اليوم ✨")
         else:
             for task in tasks:
                 col_check, col_title, col_prio, col_del = st.columns([0.5, 3, 1, 0.5])
@@ -147,10 +192,10 @@ with col_content:
     # 🔥 TAB 2: HABITS
     # ==========================================
     with tab_habits:
-        st.subheader("🔥 تتبع العادات")
+        st.subheader("🔥 تتبع العادات اليومية")
         
         with st.form("add_habit_form", clear_on_submit=True):
-            h_name = st.text_input("اسم العادة الجديدة", placeholder="مثال: القراءة، الرياضة...")
+            h_name = st.text_input("اسم العادة الجديدة", placeholder="مثال: حفظ 5 مصطلحات، حل تمارين...")
             if st.form_submit_button("إضافة عادة ➕"):
                 if h_name.strip():
                     db.add_habit(h_name.strip())
@@ -161,7 +206,7 @@ with col_content:
         
         habits = db.get_habits()
         if not habits:
-            st.info("ابدأ بتبني عادات جديدة اليوم! 💪")
+            st.info("استمري فـ بناء عادات التلميذة المثالية! 💪")
         else:
             for habit in habits:
                 col_h_name, col_h_streak, col_h_btn, col_h_del = st.columns([2, 1, 1.5, 0.5])
@@ -177,9 +222,9 @@ with col_content:
                         success = db.complete_habit(habit["id"])
                         if success:
                             st.balloons()
-                            st.success("ممتاز! استمر 🔥")
+                            st.success("تبارك الله عليك يا كوثر! 🔥")
                         else:
-                            st.warning("تم التسجيل اليوم ببالفعل!")
+                            st.warning("تم التسجيل اليوم بالفعل!")
                         st.rerun()
                         
                 with col_h_del:
@@ -191,7 +236,7 @@ with col_content:
     # ⏱️ TAB 3: FOCUS TIMER
     # ==========================================
     with tab_focus:
-        st.subheader("⏱️ مؤقت التركيز")
+        st.subheader("⏱️ مؤقت التركيز والتفوق")
         
         col_f1, col_f2 = st.columns(2)
         with col_f1:
@@ -199,7 +244,7 @@ with col_content:
         with col_f2:
             s_type = st.selectbox("نوع الجلسة:", ["Pomodoro 🍅", "Deep Work 🧠", "Quick Review ⚡"])
 
-        if st.button("ابدأ المؤقت 🚀"):
+        if st.button("ابدأي المؤقت 🚀"):
             st.write(f"بدأت جلسة: {s_type}")
             timer_box = st.empty()
             p_bar = st.progress(0.0)
@@ -211,7 +256,7 @@ with col_content:
                 p_bar.progress((total_sec - r) / total_sec)
                 time.sleep(1)
                 
-            st.success("🎉 انتهت الجلسة بنجاح!")
+            st.success("🎉 برافو كوثر! انتهت الجلسة بنجاح.")
             db.log_focus_session(mins, s_type)
             st.balloons()
 
@@ -219,7 +264,7 @@ with col_content:
     # 📊 TAB 4: STATISTICS
     # ==========================================
     with tab_stats:
-        st.subheader("📊 إحصائيات الأداء")
+        st.subheader("📊 إحصائيات طريق النجاح")
         
         all_tasks = db.get_tasks()
         total_focus = db.get_total_focus_time()
